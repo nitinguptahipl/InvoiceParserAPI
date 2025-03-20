@@ -19,6 +19,9 @@ app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'png', 'jpg', 'jpeg'}
 # Create uploads folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# Path to the JSON file (provided by Render)
+json_file_path = '/etc/secrets/googleKey.json'
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -33,7 +36,7 @@ class InvoiceParserService:
     def _get_auth_token(self):
         try:
             # Load JSON from file
-            with open(self.service_account_path, 'r') as f:
+            with open(json_file_path, 'r') as f:
                 service_account_json = json.load(f)
             
             credentials = Credentials.from_service_account_info(
